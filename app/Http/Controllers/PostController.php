@@ -22,4 +22,15 @@ class PostController extends Controller
 
         return back()->with('success', 'Post shared succesfully');
     }
+
+    public function destroy(Post $post)
+        {
+            if ($post->user_id !== Auth::id()) {
+                abort(403);
+            }
+
+            $post->delete();
+
+            return back()->with('success', 'Post deleted successfully.');
+        }
 }
