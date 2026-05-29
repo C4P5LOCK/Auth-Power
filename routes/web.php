@@ -3,13 +3,24 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\PostController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
 Route::get('/dashboard', function () {
-    return view('dashboard');
+
+    $posts = Post::with('user')
+        ->latest()
+        ->get();
+
+    return view('dashboard', compact('posts'));
+
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
@@ -21,5 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::post('/posts', [PostController::class, 'store'])->middleware(['auth', 'verified'])->name('posts.store');
 
 require __DIR__.'/auth.php';

@@ -12,7 +12,42 @@
             </div>
 
             <div class="grid lg:grid-cols-3 gap-6">
+                
+                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 mb-6">
+                    @if (session('success'))
+                    <div class="mb-6 rounded-2xl bg-green-100 border border-green-200 text-green-700 px-5 py-4 font-semibold">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                    <h2 class="text-xl font-black text-slate-900 mb-4">
+                        Share an update
+                    </h2>
 
+                    <form action="{{ route('posts.store') }}" method="POST">
+                        @csrf
+
+                        <textarea
+                            name="body"
+                            rows="4"
+                            maxlength="500"
+                            class="w-full rounded-2xl border-slate-300 focus:border-indigo-500 focus:ring-indigo-500"
+                            placeholder="What's on your mind?"
+                        ></textarea>
+
+                        @error('body')
+                            <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                        @enderror
+
+                        <div class="mt-4 flex justify-end">
+                            <button
+                                type="submit"
+                                class="px-6 py-3 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition"
+                            >
+                                Post Update
+                            </button>
+                        </div>
+                    </form>
+                </div>
                 <div class="lg:col-span-2 rounded-3xl bg-white p-8 shadow-sm border border-slate-200">
                     <h2 class="text-xl font-black text-slate-900">
                         Account Overview
@@ -47,8 +82,12 @@
                             </p>
                         </div>
                     </div>
+
+                    
                 </div>
 
+
+                
                 <div class="rounded-3xl bg-slate-950 p-8 shadow-sm text-white">
                     <div class="flex items-center gap-4">
                         @if(Auth::user()->avatar)
