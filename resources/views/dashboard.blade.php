@@ -151,6 +151,60 @@
                             </form>
                         </div>
 
+                        <div class="mt-4">
+
+                            <form action="{{ route('comments.store', $post) }}"
+                                method="POST"
+                                class="flex gap-3">
+
+                                @csrf
+
+                                <input
+                                    type="text"
+                                    name="body"
+                                    placeholder="Write a comment..."
+                                    class="flex-1 rounded-xl border-slate-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                >
+
+                                <button
+                                    type="submit"
+                                    class="px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700"
+                                >
+                                    Comment
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                        <div class="mt-4 space-y-3">
+
+                            @foreach($post->comments as $comment)
+
+                                <div class="bg-slate-50 rounded-2xl p-4">
+
+                                    <div class="flex items-center gap-2 mb-1">
+
+                                        <span class="font-bold text-slate-900">
+                                            {{ $comment->user->name }}
+                                        </span>
+
+                                        <span class="text-xs text-slate-500">
+                                            {{ $comment->created_at->diffForHumans() }}
+                                        </span>
+
+                                    </div>
+
+                                    <p class="text-slate-700">
+                                        {{ $comment->body }}
+                                    </p>
+
+                                </div>
+
+                            @endforeach
+
+                        </div>
+
                             </div>
                         @empty
                             <div class="bg-white rounded-3xl p-10 text-center border border-slate-200">
