@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\PostController;
 use App\Models\Post;
+use App\Http\Controllers\LikeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,7 +17,8 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
 
-    $posts = Post::with('user')
+    $posts = Post::with('user','likes')
+        ->withCount('likes')
         ->latest()
         ->get();
 
@@ -35,6 +37,8 @@ Route::middleware('auth','verified')->group(function () {
 
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+
+    Route::post('/posts/{post}/like', [LikeController::class, 'toggle'])->name('posts.like');
 });
 
 

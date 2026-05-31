@@ -131,7 +131,26 @@
                                 <p class="text-slate-700 leading-7">
                                     {{ $post->body }}
                                 </p>
-            
+                        <div class="mt-5 flex items-center gap-4 border-t border-slate-100 pt-4">
+                            <form action="{{ route('posts.like', $post) }}" method="POST">
+                                @csrf
+
+                                <button
+                                    type="submit"
+                                    class="flex items-center gap-2 text-sm font-bold transition
+                                        {{ $post->likedByUser()->exists() ? 'text-red-500' : 'text-slate-500 hover:text-red-500' }}"
+                                >
+                                    <span class="text-lg">
+                                        {{ $post->likedByUser()->exists() ? '❤️' : '🤍' }}
+                                    </span>
+
+                                    <span>
+                                        {{ $post->likes_count }} {{ Str::plural('Like', $post->likes_count) }}
+                                    </span>
+                                </button>
+                            </form>
+                        </div>
+
                             </div>
                         @empty
                             <div class="bg-white rounded-3xl p-10 text-center border border-slate-200">
