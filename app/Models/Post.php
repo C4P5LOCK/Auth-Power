@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Like;
+use App\Models\Comment;
 
 class Post extends Model
 {
@@ -26,5 +27,10 @@ class Post extends Model
     public function likedByUser()
     {
         return $this->likes()->where('user_id', auth()->id());
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }
