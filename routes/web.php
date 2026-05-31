@@ -38,12 +38,15 @@ Route::middleware('auth','verified')->group(function () {
 
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+    Route::patch('/posts/{post}',[PostController::class,'update'])->name('posts.update');
 
     Route::post('/posts/{post}/like', [LikeController::class, 'toggle'])->name('posts.like');
 
     Route::post('/posts/{post}/comments',[CommentController::class,'store'])->name('comments.store');
 
     Route::delete('/comments/{comment}',[CommentController::class,'destroy'])->name('comments.destroy');
+
+    Route::patch('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
 });
 
 

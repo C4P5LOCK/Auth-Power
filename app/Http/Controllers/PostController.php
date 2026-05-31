@@ -23,6 +23,22 @@ class PostController extends Controller
         return back()->with('success', 'Post shared succesfully');
     }
 
+    public function update(Request $request,Post $post){
+            if($post->user_id !== Auth::id()){
+                abort(403);
+            }
+
+            $request->validate([
+            'body' => ['required', 'string', 'max:300'],
+              ]);
+
+            $post->update([
+                'body' => $request->body,
+            ]);
+
+            return back()->with('Success', 'Post updated successfully.');
+    }
+
     public function destroy(Post $post)
         {
             if ($post->user_id !== Auth::id()) {

@@ -22,9 +22,7 @@
                 <div class="lg:col-span-2 space-y-6">
 
                     <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
-                        <h2 class="text-xl font-black text-slate-900 mb-4">
-                            Share an update
-                        </h2>
+                        <h2 class="text-xl font-black text-slate-900 mb-4">Share an update</h2>
 
                         <form action="{{ route('posts.store') }}" method="POST">
                             @csrf
@@ -55,188 +53,202 @@
                     <div class="space-y-6">
                         @forelse($posts as $post)
                             <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
-                                <!-- <div class="flex items-center gap-4 mb-4">
-                                    @if($post->user->avatar)
-                                        <img src="{{ $post->user->avatar }}" class="h-12 w-12 rounded-full object-cover">
-                                    @else
-                                        <div class="h-12 w-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">
-                                            {{ strtoupper(substr($post->user->name, 0, 1)) }}
+
+                                <div class="flex items-start justify-between mb-4">
+                                    <div class="flex items-center gap-4">
+                                        @if($post->user->avatar)
+                                            <img src="{{ $post->user->avatar }}" class="h-12 w-12 rounded-full object-cover">
+                                        @else
+                                            <div class="h-12 w-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">
+                                                {{ strtoupper(substr($post->user->name, 0, 1)) }}
+                                            </div>
+                                        @endif
+
+                                        <div>
+                                            <h3 class="font-bold text-slate-900">
+                                                {{ $post->user->name }}
+                                            </h3>
+                                            <p class="text-sm text-slate-500">
+                                                {{ $post->created_at->diffForHumans() }}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    @if($post->user_id === Auth::id())
+                                        <div class="flex items-center gap-3">
+                                            <button
+                                                onclick="document.getElementById('edit-post-{{ $post->id }}').classList.toggle('hidden')"
+                                                type="button"
+                                                class="text-blue-500 hover:text-blue-700"
+                                                title="Edit Post"
+                                            >
+                                                ✏️
+                                            </button>
+
+                                            <form action="{{ route('posts.destroy', $post) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+
+                                                <button
+                                                    type="submit"
+                                                    onclick="return confirm('Delete this post?')"
+                                                    class="text-red-500 hover:text-red-700"
+                                                    title="Delete Post"
+                                                >
+                                                    🗑️
+                                                </button>
+                                            </form>
                                         </div>
                                     @endif
-
-                                    <div>
-                                        <h3 class="font-bold text-slate-900">
-                                            {{ $post->user->name }}
-                                        </h3>
-                                        <p class="text-sm text-slate-500">
-                                            {{ $post->created_at->diffForHumans() }}
-                                        </p>
-                                    </div>
-                                </div> -->
-
-                        <div class="flex items-start justify-between mb-4">
-
-                            <div class="flex items-center gap-4">
-
-                                @if($post->user->avatar)
-                                    <img
-                                        src="{{ $post->user->avatar }}"
-                                        class="h-12 w-12 rounded-full object-cover"
-                                    >
-                                @else
-                                    <div class="h-12 w-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">
-                                        {{ strtoupper(substr($post->user->name, 0, 1)) }}
-                                    </div>
-                                @endif
-
-                                <div>
-                                    <h3 class="font-bold text-slate-900">
-                                        {{ $post->user->name }}
-                                    </h3>
-
-                                    <p class="text-sm text-slate-500">
-                                        {{ $post->created_at->diffForHumans() }}
-                                    </p>
                                 </div>
 
-                            </div>
-
-                            @if($post->user_id === Auth::id())
-                                <form action="{{ route('posts.destroy', $post) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button
-                                        type="submit"
-                                        onclick="return confirm('Delete this post?')"
-                                        class="text-red-500 hover:text-red-700 transition"
-                                        title="Delete Post"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="w-5 h-5"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                            stroke-width="2">
-
-                                            <path stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                d="M19 7L18.133 19.142A2 2 0 0116.138 21H7.862A2 2 0 015.867 19.142L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m-7 0h8" />
-                                        </svg>
-                                    </button>
-                                </form>
-                            @endif
-
-                        </div>
                                 <p class="text-slate-700 leading-7">
                                     {{ $post->body }}
                                 </p>
-                        <div class="mt-5 flex items-center gap-4 border-t border-slate-100 pt-4">
-                            <form action="{{ route('posts.like', $post) }}" method="POST">
-                                @csrf
 
-                                <button
-                                    type="submit"
-                                    class="flex items-center gap-2 text-sm font-bold transition
-                                        {{ $post->likedByUser()->exists() ? 'text-red-500' : 'text-slate-500 hover:text-red-500' }}"
-                                >
-                                    <span class="text-lg">
-                                        {{ $post->likedByUser()->exists() ? '❤️' : '🤍' }}
-                                    </span>
+                                @if($post->user_id === Auth::id())
+                                    <div id="edit-post-{{ $post->id }}" class="hidden mt-4">
+                                        <form action="{{ route('posts.update', $post) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
 
-                                    <span>
-                                        {{ $post->likes_count }} {{ Str::plural('Like', $post->likes_count) }}
-                                    </span>
-                                </button>
-                            </form>
+                                            <textarea
+                                                name="body"
+                                                rows="3"
+                                                class="w-full rounded-xl border-slate-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                            >{{ $post->body }}</textarea>
 
-                            <div class="flex items-center gap-2 text-sm font-bold text-slate-500">
-                                <span class="text-lg">💬</span>
-                                <span>
-                                    {{ $post->comments_count }} {{ $post->comments_count == 1 ? 'Comment' : 'Comments' }}
-                                </span>
-                                
-                            </div>
-
-                        </div>
-
-                        <div class="mt-4">
-
-                            <form action="{{ route('comments.store', $post) }}"
-                                method="POST"
-                                class="flex gap-3">
-
-                                @csrf
-
-                                <input
-                                    type="text"
-                                    name="body"
-                                    placeholder="Write a comment..."
-                                    class="flex-1 rounded-xl border-slate-300 focus:border-indigo-500 focus:ring-indigo-500"
-                                >
-
-                                <button
-                                    type="submit"
-                                    class="px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700"
-                                >
-                                    Comment
-                                </button>
-
-                            </form>
-
-                        </div>
-
-                        <div class="mt-4 space-y-3">
-
-                            @foreach($post->comments as $comment)
-
-                                <div class="bg-slate-50 rounded-2xl p-4">
-
-                                    <div class="flex items-center gap-2 mb-1">
-
-                                        <span class="font-bold text-slate-900">
-                                            {{ $comment->user->name }}
-                                        </span>
-
-                                        <span class="text-xs text-slate-500">
-                                            {{ $comment->created_at->diffForHumans() }}
-                                        </span>
-
+                                            <button
+                                                type="submit"
+                                                class="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold"
+                                            >
+                                                Save Changes
+                                            </button>
+                                        </form>
                                     </div>
+                                @endif
 
-                                    <p class="text-slate-700">
-                                        {{ $comment->body }}
-                                    </p>
-                                
-
-                                @if($comment->user_id === Auth::id())
-                                    <form action="{{ route('comments.destroy', $comment) }}" method="POST">
+                                <div class="mt-5 flex items-center gap-6 border-t border-slate-100 pt-4">
+                                    <form action="{{ route('posts.like', $post) }}" method="POST">
                                         @csrf
-                                        @method('DELETE')
 
                                         <button
                                             type="submit"
-                                            onclick="return confirm('Delete this comment?')"
-                                            class="text-red-500 hover:text-red-700 transition"
-                                            title="Delete Comment"
+                                            class="flex items-center gap-2 text-sm font-bold transition
+                                            {{ $post->likedByUser()->exists() ? 'text-red-500' : 'text-slate-500 hover:text-red-500' }}"
                                         >
-                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                class="w-4 h-4"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
-                                                stroke-width="2">
-                                                <path stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    d="M19 7L18.133 19.142A2 2 0 0116.138 21H7.862A2 2 0 015.867 19.142L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m-7 0h8" />
-                                            </svg>
+                                            <span class="text-lg">
+                                                {{ $post->likedByUser()->exists() ? '❤️' : '🤍' }}
+                                            </span>
+                                            <span>
+                                                {{ $post->likes_count }} {{ $post->likes_count == 1 ? 'Like' : 'Likes' }}
+                                            </span>
                                         </button>
                                     </form>
-                                @endif
-                            </div>
-                            @endforeach
 
-                        </div>
+                                    <div class="flex items-center gap-2 text-sm font-bold text-slate-500">
+                                        <span class="text-lg">💬</span>
+                                        <span>
+                                            {{ $post->comments_count }} {{ $post->comments_count == 1 ? 'Comment' : 'Comments' }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
+                                    <form action="{{ route('comments.store', $post) }}" method="POST" class="flex gap-3">
+                                        @csrf
+
+                                        <input
+                                            type="text"
+                                            name="body"
+                                            placeholder="Write a comment..."
+                                            class="flex-1 rounded-xl border-slate-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                        >
+
+                                        <button
+                                            type="submit"
+                                            class="px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700"
+                                        >
+                                            Comment
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <div class="mt-4 space-y-3">
+                                    @foreach($post->comments as $comment)
+                                        <div class="bg-slate-50 rounded-2xl p-4">
+                                            <div class="flex items-start justify-between gap-4">
+
+                                                <div class="flex-1">
+                                                    <div class="flex items-center gap-2 mb-1">
+                                                        <span class="font-bold text-slate-900">
+                                                            {{ $comment->user->name }}
+                                                        </span>
+
+                                                        <span class="text-xs text-slate-500">
+                                                            {{ $comment->created_at->diffForHumans() }}
+                                                        </span>
+                                                    </div>
+
+                                                    <p class="text-slate-700">
+                                                        {{ $comment->body }}
+                                                    </p>
+
+                                                    @if($comment->user_id === Auth::id())
+                                                        <div id="edit-comment-{{ $comment->id }}" class="hidden mt-3">
+                                                            <form action="{{ route('comments.update', $comment) }}" method="POST">
+                                                                @csrf
+                                                                @method('PATCH')
+
+                                                                <input
+                                                                    type="text"
+                                                                    name="body"
+                                                                    value="{{ $comment->body }}"
+                                                                    class="w-full rounded-xl border-slate-300 focus:border-indigo-500 focus:ring-indigo-500"
+                                                                >
+
+                                                                <button
+                                                                    type="submit"
+                                                                    class="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold"
+                                                                >
+                                                                    Save Changes
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    @endif
+                                                </div>
+
+                                                @if($comment->user_id === Auth::id())
+                                                    <div class="flex items-center gap-2">
+                                                        <button
+                                                            onclick="document.getElementById('edit-comment-{{ $comment->id }}').classList.toggle('hidden')"
+                                                            type="button"
+                                                            class="text-blue-500 hover:text-blue-700"
+                                                            title="Edit Comment"
+                                                        >
+                                                            ✏️
+                                                        </button>
+
+                                                        <form action="{{ route('comments.destroy', $comment) }}" method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+
+                                                            <button
+                                                                type="submit"
+                                                                onclick="return confirm('Delete this comment?')"
+                                                                class="text-red-500 hover:text-red-700"
+                                                                title="Delete Comment"
+                                                            >
+                                                                🗑️
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                @endif
+
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
 
                             </div>
                         @empty
