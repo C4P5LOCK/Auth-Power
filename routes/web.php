@@ -19,7 +19,7 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
 
     $posts = Post::with('user','likes','comments.user')
-        ->withCount('likes')
+        ->withCount('likes','comments')
         ->latest()
         ->get();
 
@@ -42,6 +42,8 @@ Route::middleware('auth','verified')->group(function () {
     Route::post('/posts/{post}/like', [LikeController::class, 'toggle'])->name('posts.like');
 
     Route::post('/posts/{post}/comments',[CommentController::class,'store'])->name('comments.store');
+
+    Route::delete('/comments/{comment}',[CommentController::class,'destroy'])->name('comments.destroy');
 });
 
 

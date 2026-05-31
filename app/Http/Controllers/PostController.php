@@ -31,6 +31,6 @@ class PostController extends Controller
 
             $post->delete();
 
-            return back()->with('success', 'Post deleted successfully.');
+            return back()->with('Success', 'Post deleted successfully.');
         }
 }

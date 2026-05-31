@@ -21,6 +21,15 @@ class CommentController extends Controller
             'body' =>$request->body
         ]);
 
-        return back()->with('success','Comment added succesfully.');
+        return back()->with('Success','Comment added succesfully.');
+    }
+
+    public function destroy(Comment $comment){
+        if ($comment->user_id !== Auth::id()){
+            abort(403);
+        }
+        $comment->delete();
+
+        return back()->with('Success','Comment Deleted');
     }
 }
