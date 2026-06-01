@@ -32,10 +32,14 @@ Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirect'])->
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google.callback');
 
 Route::middleware('auth','verified')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    //Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    //Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/user/{user}',[ProfileController::class,'show'])->name('profile.show');
+
+    Route::get('/profile/edit', [ProfileController::class, 'editprofile'])->name('profile.edit');
+
+    Route::patch('/profile/update', [ProfileController::class, 'updateprofile'])->name('profile.update');
 
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');

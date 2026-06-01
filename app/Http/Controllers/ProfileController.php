@@ -65,4 +65,31 @@ class ProfileController extends Controller
 
     return view('profile.show', compact('user', 'posts'));
 }
+
+    public function editprofile()
+    {
+        return view('profile.edit');
+    }
+
+    public function updateprofile(Request $request)
+    {
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'bio' => ['nullable', 'string', 'max:500'],
+            'location' => ['nullable', 'string', 'max:255'],
+            'website' => ['nullable', 'url', 'max:255'],
+        ]);
+
+        Auth::user()->update([
+            'name' => $request->name,
+            'bio' => $request->bio,
+            'location' => $request->location,
+            'website' => $request->website,
+        ]);
+
+        return redirect()
+            ->route('profile.show', Auth::user())
+            ->with('success', 'Profile updated successfully.');
+    }
 }
+

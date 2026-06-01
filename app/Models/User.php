@@ -39,6 +39,9 @@ class User extends Authenticatable
     'google_id',
     'avatar',
     'provider',
+    'bio',
+    'location',
+    'website',
 ];
 
 public function posts(){
