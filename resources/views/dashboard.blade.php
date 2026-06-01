@@ -66,7 +66,9 @@
 
                                         <div>
                                             <h3 class="font-bold text-slate-900">
-                                                {{ $post->user->name }}
+                                                <a href="{{ route('profile.show', $post->user) }}" class="hover:text-indigo-600 transition">
+                                                    {{ $post->user->name }}
+                                                </a>
                                             </h3>
                                             <p class="text-sm text-slate-500">
                                                 {{ $post->created_at->diffForHumans() }}
