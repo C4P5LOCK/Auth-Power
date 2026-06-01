@@ -57,7 +57,12 @@
                                 <div class="flex items-start justify-between mb-4">
                                     <div class="flex items-center gap-4">
                                         @if($post->user->avatar)
-                                            <img src="{{ $post->user->avatar }}" class="h-12 w-12 rounded-full object-cover">
+                                            <img
+        src="{{ str_starts_with(Auth::user()->avatar, 'http')
+                ? Auth::user()->avatar
+                : asset('storage/' . Auth::user()->avatar) }}"
+        class="h-12 w-12 rounded-3xl object-cover"
+    >
                                         @else
                                             <div class="h-12 w-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">
                                                 {{ strtoupper(substr($post->user->name, 0, 1)) }}
@@ -267,7 +272,12 @@
                     <div class="rounded-3xl bg-slate-950 p-8 shadow-sm text-white">
                         <div class="flex items-center gap-4">
                             @if(Auth::user()->avatar)
-                                <img src="{{ Auth::user()->avatar }}" class="h-16 w-16 rounded-2xl object-cover">
+                                <img
+        src="{{ str_starts_with(Auth::user()->avatar, 'http')
+                ? Auth::user()->avatar
+                : asset('storage/' . Auth::user()->avatar) }}"
+        class="h-24 w-24 rounded-3xl object-cover"
+    >
                             @else
                                 <div class="h-16 w-16 rounded-2xl bg-indigo-500 flex items-center justify-center text-xl font-black">
                                     {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}

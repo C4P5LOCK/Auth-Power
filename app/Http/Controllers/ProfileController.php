@@ -78,13 +78,22 @@ class ProfileController extends Controller
             'bio' => ['nullable', 'string', 'max:500'],
             'location' => ['nullable', 'string', 'max:255'],
             'website' => ['nullable', 'url', 'max:255'],
+            'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
 
+        $avatarPath = Auth::user()->avatar;
+
+        if ($request->hasFile('avatar')) {
+
+            $avatarPath = $request->file('avatar')
+                ->store('avatars', 'public');
+        }
         Auth::user()->update([
             'name' => $request->name,
             'bio' => $request->bio,
             'location' => $request->location,
             'website' => $request->website,
+            'avatar' => $avatarPath,
         ]);
 
         return redirect()

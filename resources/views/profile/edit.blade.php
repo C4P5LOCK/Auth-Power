@@ -14,7 +14,7 @@
             </div>
 
             <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
-                <form action="{{ route('profile.update') }}" method="POST" class="space-y-6">
+                <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                     @csrf
                     @method('PATCH')
 
@@ -92,6 +92,26 @@
                             Cancel
                         </a>
 
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">
+                                Profile Picture
+                            </label>
+
+                            @if(Auth::user()->avatar)
+                                <img
+                                    src="{{ Auth::user()->provider
+                                            ? Auth::user()->avatar
+                                            : asset('storage/' . Auth::user()->avatar) }}"
+                                    class="h-24 w-24 rounded-2xl object-cover mb-4"
+                                >
+                            @endif
+
+                            <input type="file" name="avatar" class="w-full rounded-xl border-slate-300">
+
+                            @error('avatar')
+                                <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                            @enderror
+                        </div>
                         <button
                             type="submit"
                             class="px-6 py-3 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition"

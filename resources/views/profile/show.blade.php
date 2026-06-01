@@ -5,12 +5,17 @@
             <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-200 mb-6">
                 <div class="flex items-center gap-6">
                     @if($user->avatar)
-                        <img src="{{ $user->avatar }}" class="h-24 w-24 rounded-3xl object-cover">
-                    @else
-                        <div class="h-24 w-24 rounded-3xl bg-indigo-600 text-white flex items-center justify-center text-4xl font-black">
-                            {{ strtoupper(substr($user->name, 0, 1)) }}
-                        </div>
-                    @endif
+    <img
+        src="{{ str_starts_with($user->avatar, 'http')
+                ? $user->avatar
+                : asset('storage/' . $user->avatar) }}"
+        class="h-24 w-24 rounded-3xl object-cover"
+    >
+@else
+    <div class="h-24 w-24 rounded-3xl bg-indigo-600 text-white flex items-center justify-center text-4xl font-black">
+        {{ strtoupper(substr($user->name, 0, 1)) }}
+    </div>
+@endif
 
                     <div>
                         <h1 class="text-3xl font-black text-slate-900">
@@ -45,6 +50,13 @@
                         </p>
                     </div>
                 </div>
+                @if(Auth::user()->id === $user->id)
+
+                <a href="{{route('profile.edit')}}" class="px-6 py-3 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition"
+                        >
+                        Edit Profile
+</a>
+                @endif
             </div>
 
             <div class="space-y-6">
