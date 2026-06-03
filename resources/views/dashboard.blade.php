@@ -24,7 +24,7 @@
                     <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
                         <h2 class="text-xl font-black text-slate-900 mb-4">Share an update</h2>
 
-                        <form action="{{ route('posts.store') }}" method="POST">
+                        <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <textarea
@@ -34,6 +34,22 @@
                                 class="w-full rounded-2xl border-slate-300 focus:border-indigo-500 focus:ring-indigo-500"
                                 placeholder="What's on your mind?"
                             ></textarea>
+
+                            <div class="mt-4">
+                                <label class="block text-sm font-bold text-slate-700 mb-2">
+                                    Add Image
+                                </label>
+
+                                <input
+                                    type="file"
+                                    name="image"
+                                    class="w-full rounded-xl border border-slate-300 bg-white p-3"
+                                >
+
+                                @error('image')
+                                    <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                                @enderror
+                            </div>
 
                             @error('body')
                                 <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
@@ -58,11 +74,11 @@
                                     <div class="flex items-center gap-4">
                                         @if($post->user->avatar)
                                             <img
-        src="{{ str_starts_with(Auth::user()->avatar, 'http')
-                ? Auth::user()->avatar
-                : asset('storage/' . Auth::user()->avatar) }}"
-        class="h-12 w-12 rounded-3xl object-cover"
-    >
+                                                src="{{ str_starts_with(Auth::user()->avatar, 'http')
+                                                        ? Auth::user()->avatar
+                                                        : asset('storage/' . Auth::user()->avatar) }}"
+                                                class="h-12 w-12 rounded-3xl object-cover"
+                                            >
                                         @else
                                             <div class="h-12 w-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">
                                                 {{ strtoupper(substr($post->user->name, 0, 1)) }}
@@ -112,6 +128,16 @@
                                 <p class="text-slate-700 leading-7">
                                     {{ $post->body }}
                                 </p>
+
+                                @if($post->image)
+                                    <div class="mt-4">
+                                        <img
+                                            src="{{ asset('storage/' . $post->image) }}"
+                                            alt="Post image"
+                                            class="w-full rounded-2xl object-cover max-h-[250px]"
+                                        >
+                                    </div>
+                                @endif
 
                                 @if($post->user_id === Auth::id())
                                     <div id="edit-post-{{ $post->id }}" class="hidden mt-4">

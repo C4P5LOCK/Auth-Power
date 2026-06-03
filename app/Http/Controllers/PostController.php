@@ -13,11 +13,19 @@ class PostController extends Controller
     public function store(Request $request){
         $request->validate([
             'body' => ['required','string','max:500'],
+             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
+
+        $imagePath = null;
+
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('posts', 'public');
+            }
 
         Post::create([
             'user_id' => Auth::id(),
-            'body' => $request->body
+            'body' => $request->body,
+            'image' => $imagePath
         ]);
 
         return back()->with('success', 'Post shared succesfully');
