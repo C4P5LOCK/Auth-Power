@@ -54,10 +54,20 @@
                                     class="w-full rounded-xl border border-slate-300 bg-white p-3"
                                 >
 
-                                <img
-                                    id="post-image-preview"
-                                    class="hidden mt-4 w-full max-h-[350px] rounded-2xl object-cover"
-                                >
+                                <div id="post-image-preview-wrapper" class="hidden mt-4">
+                                    <img
+                                        id="post-image-preview"
+                                        class="w-full max-h-[350px] rounded-2xl object-cover"
+                                    >
+
+                                    <button
+                                        type="button"
+                                        onclick="removePostImagePreview()"
+                                        class="mt-3 px-4 py-2 bg-red-100 text-red-600 rounded-xl font-bold hover:bg-red-200 transition"
+                                    >
+                                        Remove Image
+                                    </button>
+                                </div>
 
                                 @error('image')
                                     <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
@@ -391,15 +401,26 @@
     function previewPostImage(event) {
         const file = event.target.files[0];
         const preview = document.getElementById('post-image-preview');
+        const wrapper = document.getElementById('post-image-preview-wrapper');
 
         if (!file) {
-            preview.classList.add('hidden');
+            wrapper.classList.add('hidden');
             preview.src = '';
             return;
         }
 
         preview.src = URL.createObjectURL(file);
-        preview.classList.remove('hidden');
+        wrapper.classList.remove('hidden');
+    }
+
+    function removePostImagePreview() {
+        const input = document.querySelector('input[name="image"]');
+        const preview = document.getElementById('post-image-preview');
+        const wrapper = document.getElementById('post-image-preview-wrapper');
+
+        input.value = '';
+        preview.src = '';
+        wrapper.classList.add('hidden');
     }
 </script>
 </x-app-layout>
