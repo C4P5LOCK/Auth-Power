@@ -40,10 +40,23 @@
                                     Add Image
                                 </label>
 
-                                <input
+                                <!-- <input
                                     type="file"
                                     name="image"
                                     class="w-full rounded-xl border border-slate-300 bg-white p-3"
+                                > -->
+
+                                <input
+                                    type="file"
+                                    name="image"
+                                    accept="image/*"
+                                    onchange="previewPostImage(event)"
+                                    class="w-full rounded-xl border border-slate-300 bg-white p-3"
+                                >
+
+                                <img
+                                    id="post-image-preview"
+                                    class="hidden mt-4 w-full max-h-[350px] rounded-2xl object-cover"
                                 >
 
                                 @error('image')
@@ -374,4 +387,19 @@
             </div>
         </div>
     </div>
+    <script>
+    function previewPostImage(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('post-image-preview');
+
+        if (!file) {
+            preview.classList.add('hidden');
+            preview.src = '';
+            return;
+        }
+
+        preview.src = URL.createObjectURL(file);
+        preview.classList.remove('hidden');
+    }
+</script>
 </x-app-layout>
