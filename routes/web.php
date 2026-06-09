@@ -23,7 +23,13 @@ Route::get('/dashboard', function () {
         ->latest()
         ->get();
 
-    return view('dashboard', compact('posts'));
+        $notifications = Auth::user()
+        ->unreadNotifications()
+        ->latest()
+        ->take(5)
+        ->get();
+
+    return view('dashboard', compact('posts','notifications'));
 
 })->middleware(['auth', 'verified'])->name('dashboard');
 

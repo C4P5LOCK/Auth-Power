@@ -28,12 +28,16 @@ class LikeController extends Controller
 
         // Don't notify yourself
     if ($post->user_id !== Auth::id()) {
+
+    //dd('before notify');
         $post->user->notify(
             new PostLikedNotification(
                 Auth::user(),
                 $post
             )
         );
+
+        //dd('after notify');
     }
 
     //dd($post->user_id, Auth::id());
