@@ -7,6 +7,7 @@ use App\Http\Controllers\PostController;
 use App\Models\Post;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FollowController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -42,6 +43,10 @@ Route::middleware('auth','verified')->group(function () {
     //Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/user/{user}',[ProfileController::class,'show'])->name('profile.show');
+    
+    Route::post('/users/{user}/follow', [FollowController::class, 'toggle'])
+    ->middleware(['auth', 'verified'])
+    ->name('users.follow');
 
     Route::get('/profile/edit', [ProfileController::class, 'editprofile'])->name('profile.edit');
 

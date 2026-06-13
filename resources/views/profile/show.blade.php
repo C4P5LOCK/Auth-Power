@@ -26,6 +26,35 @@
                             Joined {{ $user->created_at->format('M d, Y') }}
                         </p>
                     </div>
+
+                    @if(Auth::id() !== $user->id)
+
+                        <form
+                            action="{{ route('users.follow', $user) }}"
+                            method="POST"
+                        >
+                            @csrf
+
+                            
+                            @if(Auth::user()->following()->where('following_id', $user->id)->exists())
+                                <button
+                                    type="submit"
+                                    class="px-4 py-2 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600"
+                                >
+                                    Unfollow
+                                </button>
+                            @else
+                                <button
+                                    type="submit"
+                                    class="px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700"
+                                >
+                                    Follow
+                                </button>
+                            @endif
+
+                        </form>
+
+                    @endif
                 </div>
 
                 <div class="grid sm:grid-cols-3 gap-4 mt-8">
