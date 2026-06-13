@@ -25,7 +25,22 @@
                         <p class="text-slate-500 mt-1">
                             Joined {{ $user->created_at->format('M d, Y') }}
                         </p>
+
                     </div>
+
+                    <a href="{{ route('profile.followers', $user) }}" class="rounded-2xl bg-slate-50 p-5 block hover:bg-slate-100">
+                        <p class="text-sm text-slate-500">Followers</p>
+                        <p class="text-2xl font-black text-slate-900">
+                            {{ $user->followers->count() }}
+                        </p>
+                    </a>
+
+                    <a href="{{ route('profile.following', $user) }}" class="rounded-2xl bg-slate-50 p-5 block hover:bg-slate-100">
+                        <p class="text-sm text-slate-500">Following</p>
+                        <p class="text-2xl font-black text-slate-900">
+                            {{ $user->following->count() }}
+                        </p>
+                    </a>
 
                     @if(Auth::id() !== $user->id)
 

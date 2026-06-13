@@ -100,5 +100,20 @@ class ProfileController extends Controller
             ->route('profile.show', Auth::user())
             ->with('success', 'Profile updated successfully.');
     }
+
+    public function followers(User $user)
+        {
+            $followers = $user->followers()->latest()->get();
+
+            return view('profile.followers', compact('user', 'followers'));
+        }
+
+    public function following(User $user)
+        {
+            $following = $user->following()->latest()->get();
+
+            return view('profile.following', compact('user', 'following'));
+        }
+
 }
 

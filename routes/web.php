@@ -43,10 +43,18 @@ Route::middleware('auth','verified')->group(function () {
     //Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/user/{user}',[ProfileController::class,'show'])->name('profile.show');
-    
+
     Route::post('/users/{user}/follow', [FollowController::class, 'toggle'])
     ->middleware(['auth', 'verified'])
     ->name('users.follow');
+
+    Route::get('/user/{user}/followers', [ProfileController::class, 'followers'])
+    ->middleware(['auth', 'verified'])
+    ->name('profile.followers');
+
+    Route::get('/user/{user}/following', [ProfileController::class, 'following'])
+    ->middleware(['auth', 'verified'])
+    ->name('profile.following');
 
     Route::get('/profile/edit', [ProfileController::class, 'editprofile'])->name('profile.edit');
 
