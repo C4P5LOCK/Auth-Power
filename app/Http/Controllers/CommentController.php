@@ -16,6 +16,7 @@ class CommentController extends Controller
             'body' => ['required', 'string', 'max:300'],
         ]);
 
+        
         Comment::create([
             'user_id' => Auth::id(),
             'post_id' => $post->id,
@@ -28,8 +29,7 @@ class CommentController extends Controller
             );
             // dd($post->user->id, Auth::id(), 'comment notification sent');
         }
-
-        // dd('comment sent');
+    
 
         return back()->with('success', 'Comment added successfully.');
     }
